@@ -20,13 +20,34 @@ class ViewController: UIViewController {
     @IBOutlet weak var scrubber: UISlider!
     @IBAction func playSound(_ sender: Any) {
         player.play()
+        timer=Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateScrubber), userInfo: nil, repeats: true)
     }
     @IBAction func pauseSound(_ sender: Any) {
+        player.pause()
+        timer.invalidate()
     }
     @IBAction func stopSound(_ sender: Any) {
+        player.stop()
+        
     }
+    
+    @objc func updateScrubber()
+    {
+        scrubber.value=Float(player.currentTime)
+    }
+    @IBAction func volumeChange(_ sender: UISlider) {
+        player.volume=volumeSlider.value
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        do{
+            player=try AVAudioPlayer(contentsOf:URL(fileURLWithPath: path!))
+        }
+        catch{
+            print(error)
+        }
+       
         // Do any additional setup after loading the view.
     }
 
