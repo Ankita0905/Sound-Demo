@@ -28,6 +28,8 @@ class ViewController: UIViewController {
     }
     @IBAction func stopSound(_ sender: Any) {
         player.stop()
+        timer.invalidate()
+        player.currentTime=0
         
     }
     
@@ -39,10 +41,15 @@ class ViewController: UIViewController {
         player.volume=volumeSlider.value
     }
     
+    @IBAction func changePosition(_ sender: UISlider) {
+        player.currentTime=TimeInterval(scrubber.value)
+        player.play()
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         do{
             player=try AVAudioPlayer(contentsOf:URL(fileURLWithPath: path!))
+            scrubber.maximumValue=Float(player.duration)
         }
         catch{
             print(error)
