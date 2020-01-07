@@ -45,15 +45,34 @@ class ViewController: UIViewController {
         player.currentTime=TimeInterval(scrubber.value)
         player.play()
     }
+    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        if event?.subtype==UIEvent.EventSubtype.motionShake
+        {
+            let soundArray=["boing","explosion","hit","knife","shoot","swish","wah","warble"]
+            
+            let randomNumber=Int(arc4random_uniform(UInt32(soundArray.count)))
+            
+            let fileLocation=Bundle.main.path(forResource: soundArray[randomNumber], ofType: "mp3")
+            do{
+                player=try AVAudioPlayer(contentsOf:URL(fileURLWithPath: fileLocation!))
+//                scrubber.maximumValue=Float(player.duration)
+                player.play()
+            }
+            catch{
+                print(error)
+            }
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        do{
-            player=try AVAudioPlayer(contentsOf:URL(fileURLWithPath: path!))
-            scrubber.maximumValue=Float(player.duration)
-        }
-        catch{
-            print(error)
-        }
+//        do{
+//            player=try AVAudioPlayer(contentsOf:URL(fileURLWithPath: path!))
+//            scrubber.maximumValue=Float(player.duration)
+//        }
+//        catch{
+//            print(error)
+//        }
+       
        
         // Do any additional setup after loading the view.
     }
